@@ -5,6 +5,11 @@ export class SignupDto {
   password: string;
 }
 
+export class LoginDto {
+  email: string;
+  password: string;
+}
+
 export class SignupResult {
   accessToken: string;
   refreshToken: string;

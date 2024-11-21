@@ -1,7 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignupDto } from './auth.dto';
+import { LoginDto, SignupDto } from './auth.dto';
 import { AuthGuard } from './auth.guard';
+import { User } from './user.decorator';
+import { RefreshGuard } from './refresh.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +14,20 @@ export class AuthController {
     return await this.authService.signup(dto);
   }
 
-  @UseGuards(AuthGuard)
+  @Post('login')
+  async login(@Body() dto: LoginDto) {
+    return await this.authService.login(dto);
+  }
+
+  @UseGuards(RefreshGuard)
   @Post('refresh')
-  async refresh() {}
+  async refresh(@User() user: any) {
+    return await this.authService.refresh(user);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('logout')
+  async logout(@User() user: any) {
+    await this.authService.logout(user);
+  }
 }
